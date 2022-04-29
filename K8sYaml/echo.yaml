@@ -20,8 +20,11 @@ spec:
     matchLabels:
       app: echo
   strategy:
-    type: Recreate
-  replicas: 3
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2       
+      maxUnavailable: 1
+  replicas: 2
   template:
     metadata:
       labels:
@@ -32,6 +35,34 @@ spec:
       - name: echo
         image: hashicorp/http-echo
         args:
-        - "-text=Blu"
+        - "-text=Blue"
+        ports:
+        - containerPort: 5678
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-green
+spec:
+  selector:
+    matchLabels:
+      app: echo
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2       
+      maxUnavailable: 1
+  replicas: 0
+  template:
+    metadata:
+      labels:
+        app: echo
+        version: "1.0"
+    spec:
+      containers:
+      - name: echo
+        image: hashicorp/http-echo
+        args:
+        - "-text=Green"
         ports:
         - containerPort: 5678
