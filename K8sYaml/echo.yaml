@@ -25,12 +25,7 @@ spec:
       maxSurge: 2       
       maxUnavailable: 1
 
-  replicas: 2
-  template:
-    metadata:
-      labels:
-        app: echo
-        version: "1.0"
+ 
     spec:
       containers:
       - name: echo
