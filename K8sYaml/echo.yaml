@@ -4,7 +4,8 @@ metadata:
   name: echo
 spec:
   ports:
-  - port: 80
+  - protocol: TCP
+    port: 80
     targetPort: 5678
   selector:
     app: echo
