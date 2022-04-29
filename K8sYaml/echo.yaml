@@ -19,8 +19,12 @@ spec:
   selector:
     matchLabels:
       app: echo
-  strategy:
-    type: Recreate
+   strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2       
+      maxUnavailable: 1
+
   replicas: 2
   template:
     metadata:
