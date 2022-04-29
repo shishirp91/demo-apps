@@ -14,16 +14,13 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: echo
+  name: echo-blue
 spec:
   selector:
     matchLabels:
       app: echo
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 2       
-      maxUnavailable: 1
+    type: Recreate
   replicas: 2
   template:
     metadata:
@@ -35,34 +32,6 @@ spec:
       - name: echo
         image: hashicorp/http-echo
         args:
-        - "-text=Prod"
+        - "-text=Blue"
         ports:
-        - containerPort: 5678
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: echo-canary
-spec:
-  selector:
-    matchLabels:
-      app: echo
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 2       
-      maxUnavailable: 1
-  replicas: 2
-  template:
-    metadata:
-      labels:
-        app: echo
-        version: "1.0"
-    spec:
-      containers:
-      - name: echo
-        image: hashicorp/http-echo
-        args:
-        - "-text=Canary"
-        ports: 
         - containerPort: 5678
