@@ -14,7 +14,35 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: echo-blue
+  name: echo
+spec:
+  selector:
+    matchLabels:
+      app: echo
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2       
+      maxUnavailable: 1
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: echo
+        version: "1.0"
+    spec:
+      containers:
+      - name: echo
+        image: hashicorp/http-echo
+        args:
+        - "-text=Prod"
+        ports:
+        - containerPort: 5678
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-canary
 spec:
   selector:
     matchLabels:
@@ -35,34 +63,6 @@ spec:
       - name: echo
         image: hashicorp/http-echo
         args:
-        - "-text=Blue"
-        ports:
-        - containerPort: 5678
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: echo-green
-spec:
-  selector:
-    matchLabels:
-      app: echo
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 2       
-      maxUnavailable: 1
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: echo
-        version: "1.0"
-    spec:
-      containers:
-      - name: echo
-        image: hashicorp/http-echo
-        args:
-        - "-text=Green"
+        - "-text=Canary"
         ports:
         - containerPort: 5678
