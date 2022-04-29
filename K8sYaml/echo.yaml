@@ -33,5 +33,5 @@ spec:
         image: hashicorp/http-echo
         args:
         - "-text=Blu"
-        ports:
+        ports: 
         - containerPort: 5678
