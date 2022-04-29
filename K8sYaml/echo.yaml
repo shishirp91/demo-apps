@@ -1,30 +1,29 @@
 apiVersion: v1
-kind: Service
+kind: Service 
 metadata:
   name: echo
 spec:
   type: LoadBalancer
   ports:
-  - protocol: TCP
-    port: 80
+  - port: 80
     targetPort: 5678
+    protocol: TCP
   selector:
     app: echo
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: echo
+  name: echo-blue
 spec:
   selector:
     matchLabels:
       app: echo
-    strategy:
+  strategy:
     type: RollingUpdate
     rollingUpdate:
       maxSurge: 2       
       maxUnavailable: 1
-
   replicas: 2
   template:
     metadata:
@@ -36,6 +35,34 @@ spec:
       - name: echo
         image: hashicorp/http-echo
         args:
-        - "-text=Prod v3"
+        - "-text=Blue"
+        ports:
+        - containerPort: 5678
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-green
+spec:
+  selector:
+    matchLabels:
+      app: echo
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2       
+      maxUnavailable: 1
+  replicas: 0
+  template:
+    metadata:
+      labels:
+        app: echo
+        version: "1.0"
+    spec:
+      containers:
+      - name: echo
+        image: hashicorp/http-echo
+        args:
+        - "-text=Green"
         ports:
         - containerPort: 5678
