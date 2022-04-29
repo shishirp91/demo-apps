@@ -32,6 +32,6 @@ spec:
       - name: echo
         image: hashicorp/http-echo
         args:
-        - "-text=Prod v2"
+        - "-text=Prod"
         ports:
         - containerPort: 5678
