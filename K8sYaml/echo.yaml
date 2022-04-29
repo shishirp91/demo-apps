@@ -64,5 +64,5 @@ spec:
         image: hashicorp/http-echo
         args:
         - "-text=Canary"
-        ports:
+        ports: 
         - containerPort: 5678
