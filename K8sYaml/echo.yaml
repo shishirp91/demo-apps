@@ -19,8 +19,12 @@ spec:
   selector:
     matchLabels:
       app: echo
-  strategy:
-    type: Recreate
+    strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2       
+      maxUnavailable: 1
+
   replicas: 2
   template:
     metadata:
@@ -32,6 +36,6 @@ spec:
       - name: echo
         image: hashicorp/http-echo
         args:
-        - "-text=Prod v2"
+        - "-text=Prod v3"
         ports:
         - containerPort: 5678
