@@ -39,7 +39,6 @@ spec:
         ports:
         - containerPort: 5678
          
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
